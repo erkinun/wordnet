@@ -19,7 +19,7 @@ public class SAP {
         BreadthFirstDirectedPaths bfdpV = new BreadthFirstDirectedPaths(digraph, v);
         BreadthFirstDirectedPaths bfdpW = new BreadthFirstDirectedPaths(digraph, w);
 
-        return executeInner(bfdpV, bfdpW);
+        return ancestorOrLength(bfdpV, bfdpW, false);
     }
 
     // a common ancestor of v and w that participates in a shortest ancestral path; -1 if no such path
@@ -28,7 +28,7 @@ public class SAP {
         BreadthFirstDirectedPaths bfdpV = new BreadthFirstDirectedPaths(digraph, v);
         BreadthFirstDirectedPaths bfdpW = new BreadthFirstDirectedPaths(digraph, w);
 
-        return innerAncestor(bfdpV, bfdpW);
+        return ancestorOrLength(bfdpV, bfdpW, true);
     }
 
     // length of shortest ancestral path between any vertex in v and any vertex in w; -1 if no such path
@@ -37,7 +37,7 @@ public class SAP {
         BreadthFirstDirectedPaths directedPathsV = new BreadthFirstDirectedPaths(digraph, v);
         BreadthFirstDirectedPaths directedPathsW = new BreadthFirstDirectedPaths(digraph, w);
 
-        return executeInner(directedPathsV, directedPathsW);
+        return ancestorOrLength(directedPathsV, directedPathsW, false);
     }
 
     // a common ancestor that participates in shortest ancestral path; -1 if no such path
@@ -45,35 +45,10 @@ public class SAP {
         BreadthFirstDirectedPaths directedPathsV = new BreadthFirstDirectedPaths(digraph, v);
         BreadthFirstDirectedPaths directedPathsW = new BreadthFirstDirectedPaths(digraph, w);
 
-        return innerAncestor(directedPathsV, directedPathsW);
+        return ancestorOrLength(directedPathsV, directedPathsW, true);
     }
 
-    private int executeInner(BreadthFirstDirectedPaths directedPathsV, BreadthFirstDirectedPaths directedPathsW) {
-        List<Integer> ancestors = new ArrayList<Integer>();
-        for (int i = 0; i < digraph.V(); i++) {
-            if (directedPathsV.hasPathTo(i) && directedPathsW.hasPathTo(i)) {
-                ancestors.add(i);
-            }
-        }
-
-        int minLen = Integer.MAX_VALUE;
-
-        for (int ancestor : ancestors) {
-            int distance = directedPathsV.distTo(ancestor) + directedPathsW.distTo(ancestor);
-            if (distance < minLen) {
-                minLen = distance;
-            }
-        }
-
-        if (minLen == Integer.MAX_VALUE) {
-            return -1;
-        }
-        else {
-            return minLen;
-        }
-    }
-
-    private int innerAncestor(BreadthFirstDirectedPaths bfdpV, BreadthFirstDirectedPaths bfdpW) {
+    private int ancestorOrLength(BreadthFirstDirectedPaths bfdpV, BreadthFirstDirectedPaths bfdpW, boolean isAncestor) {
         List<Integer> ancestors = new ArrayList<Integer>();
         for (int i = 0; i < digraph.V(); i++) {
             if (bfdpV.hasPathTo(i) && bfdpW.hasPathTo(i)) {
@@ -93,7 +68,12 @@ public class SAP {
             }
         }
 
-        return minIndex;
+        if (isAncestor) {
+            return minIndex;
+        }
+        else {
+            return min;
+        }
     }
 
     // do unit testing of this class
