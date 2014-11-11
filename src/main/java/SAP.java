@@ -37,7 +37,26 @@ public class SAP {
 
     // a common ancestor of v and w that participates in a shortest ancestral path; -1 if no such path
     public int ancestor(int v, int w) {
-        throw new IllegalStateException("not implemented");
+
+        List<Ancestor> ancestorV = findAncestors(v);
+        List<Ancestor> ancestorW = findAncestors(w);
+
+        int min = -1;
+        int minIndex = -1;
+        for (Ancestor ancestor : ancestorV) {
+            for (Ancestor other: ancestorW) {
+                if (ancestor.getIndex() == other.getIndex()) {
+                    int distance = ancestor.getDistance() + other.getDistance();
+
+                    if (min == -1 || distance < min) {
+                        minIndex = ancestor.getIndex();
+                        min = distance;
+                    }
+                }
+            }
+        }
+
+        return minIndex;
     }
 
     // length of shortest ancestral path between any vertex in v and any vertex in w; -1 if no such path
