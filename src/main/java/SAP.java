@@ -28,7 +28,6 @@ public class SAP {
 
         int min = Integer.MAX_VALUE;
 
-
         for (int ancestor : ancestors) {
             int distance = bfdpV.distTo(ancestor) + bfdpW.distTo(ancestor);
 
@@ -81,43 +80,5 @@ public class SAP {
     // do unit testing of this class
     public static void main(String[] args) {
         throw new IllegalStateException("not implemented");
-    }
-
-    private List<Ancestor> findAncestors(int vertex) {
-        List<Ancestor> ancestors = new ArrayList<Ancestor>();
-        Ancestor root = new Ancestor(vertex, 0);
-        ancestors.add(root); // it is the closest ancestor to itself
-
-        Queue<Ancestor> bfsQueue = new Queue<Ancestor>();
-        bfsQueue.enqueue(root);
-
-        while (!bfsQueue.isEmpty()) {
-            Ancestor vtx = bfsQueue.dequeue();
-            for (int index : digraph.adj(vtx.getIndex())) {
-                Ancestor ancestor = new Ancestor(index, vtx.getDistance() + 1);
-                bfsQueue.enqueue(ancestor);
-                ancestors.add(ancestor);
-            }
-        }
-
-        return ancestors;
-    }
-
-    private static class Ancestor {
-        private final int index;
-        private final int distance;
-
-        private Ancestor(int index, int distance) {
-            this.index = index;
-            this.distance = distance;
-        }
-
-        public int getIndex() {
-            return index;
-        }
-
-        public int getDistance() {
-            return distance;
-        }
     }
 }
