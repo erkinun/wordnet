@@ -2,14 +2,12 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 public class SAPTest {
 
     private SAP sap;
 
     @Before
-    public void setup() {
+    public void setUp() {
         In in = new In("files/digraph1.txt");
         Digraph G = new Digraph(in);
         sap = new SAP(G);

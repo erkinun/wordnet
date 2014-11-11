@@ -16,19 +16,24 @@ public class SAP {
     // length of shortest ancestral path between v and w; -1 if no such path
     public int length(int v, int w) {
 
-        List<Ancestor> ancestorV = findAncestors(v);
-        List<Ancestor> ancestorW = findAncestors(w);
+        BreadthFirstDirectedPaths bfdpV = new BreadthFirstDirectedPaths(digraph, v);
+        BreadthFirstDirectedPaths bfdpW = new BreadthFirstDirectedPaths(digraph, w);
 
-        int min = -1;
-        for (Ancestor ancestor : ancestorV) {
-            for (Ancestor other: ancestorW) {
-                if (ancestor.getIndex() == other.getIndex()) {
-                    int distance = ancestor.getDistance() + other.getDistance();
+        List<Integer> ancestors = new ArrayList<Integer>();
+        for (int i = 0; i < digraph.V(); i++) {
+            if (bfdpV.hasPathTo(i) && bfdpW.hasPathTo(w)) {
+                ancestors.add(i);
+            }
+        }
 
-                    if (min == -1 || distance < min) {
-                        min = distance;
-                    }
-                }
+        int min = Integer.MAX_VALUE;
+
+
+        for (int ancestor : ancestors) {
+            int distance = bfdpV.distTo(ancestor) + bfdpW.distTo(ancestor);
+
+            if (distance < min) {
+                min = distance;
             }
         }
 
@@ -38,21 +43,25 @@ public class SAP {
     // a common ancestor of v and w that participates in a shortest ancestral path; -1 if no such path
     public int ancestor(int v, int w) {
 
-        List<Ancestor> ancestorV = findAncestors(v);
-        List<Ancestor> ancestorW = findAncestors(w);
+        BreadthFirstDirectedPaths bfdpV = new BreadthFirstDirectedPaths(digraph, v);
+        BreadthFirstDirectedPaths bfdpW = new BreadthFirstDirectedPaths(digraph, w);
 
-        int min = -1;
+        List<Integer> ancestors = new ArrayList<Integer>();
+        for (int i = 0; i < digraph.V(); i++) {
+            if (bfdpV.hasPathTo(i) && bfdpW.hasPathTo(w)) {
+                ancestors.add(i);
+            }
+        }
+
+        int min = Integer.MAX_VALUE;
         int minIndex = -1;
-        for (Ancestor ancestor : ancestorV) {
-            for (Ancestor other: ancestorW) {
-                if (ancestor.getIndex() == other.getIndex()) {
-                    int distance = ancestor.getDistance() + other.getDistance();
 
-                    if (min == -1 || distance < min) {
-                        minIndex = ancestor.getIndex();
-                        min = distance;
-                    }
-                }
+        for (int ancestor : ancestors) {
+            int distance = bfdpV.distTo(ancestor) + bfdpW.distTo(ancestor);
+
+            if (distance < min) {
+                min = distance;
+                minIndex = ancestor;
             }
         }
 
