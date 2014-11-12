@@ -43,4 +43,9 @@ public class WordNetTest {
 
         wordNet.isNoun(null);
     }
+
+    @Test
+    public void distanceToSame() {
+        Assert.assertEquals(0, wordNet.distance("Abkhaz", "Abkhaz"));
+    }
 }

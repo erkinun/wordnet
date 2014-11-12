@@ -15,7 +15,9 @@ public class WordNet {
     // constructor takes the name of the two input files
     public WordNet(String synsetFileName, String hypernymFile) {
 
-        synsetMap = handleSynsets(synsetFileName, nouns);
+        synsetMap = handleSynsets(synsetFileName
+                ,
+                nouns);
 
         hypernyms = handleHypernyms(hypernymFile, nouns.keySet().size());
     }
@@ -75,7 +77,8 @@ public class WordNet {
         //WordNet wordNet = new WordNet("files/synsets15.txt", "files/hypernyms15Tree.txt");
     }
 
-    private Map<Integer, Synset> handleSynsets(String synsetFileName, Map<String, Set<Integer>> nounSet) {
+    private Map<Integer, Synset> handleSynsets(String synsetFileName,
+                                               Map<String, Set<Integer>> nounSet) {
 
         In in = new In(synsetFileName);
 
