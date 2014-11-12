@@ -9,7 +9,7 @@ import java.util.Set;
 public class WordNet {
 
     private Map<Integer, Synset> synsetMap;
-    private Set<String> nouns = new HashSet<String>();
+    private Map<String, Set<Integer>> nouns = new HashMap<String, Set<Integer>>();
     private Digraph hypernyms;
 
     // constructor takes the name of the two input files
@@ -17,21 +17,39 @@ public class WordNet {
 
         synsetMap = handleSynsets(synsetFileName, nouns);
 
-        hypernyms = handleHypernyms(hypernymFile, nouns.size());
+        hypernyms = handleHypernyms(hypernymFile, nouns.keySet().size());
     }
 
     // returns all WordNet nouns
     public Iterable<String> nouns() {
-        return nouns;
+        return nouns.keySet();
     }
 
     // is the word a WordNet noun?
     public boolean isNoun(String word) {
-        throw new IllegalStateException("Not Implemented");
+
+        if (word == null) {
+            throw new NullPointerException("arg is null");
+        }
+
+        return nouns.keySet().contains(word);
     }
 
     // distance between nounA and nounB (defined below)
     public int distance(String nounA, String nounB) {
+
+        if (!isNoun(nounA)) {
+            throw new IllegalArgumentException("not existing noun: " + nounA);
+        }
+
+        if (!isNoun(nounB)) {
+            throw new IllegalArgumentException("not existing noun: " + nounB);
+        }
+
+        //SAP sap = new SAP(hypernyms);
+
+        //return sap.length()
+
         throw new IllegalStateException("Not Implemented");
     }
 
@@ -46,7 +64,7 @@ public class WordNet {
         //WordNet wordNet = new WordNet("files/synsets15.txt", "files/hypernyms15Tree.txt");
     }
 
-    private Map<Integer, Synset> handleSynsets(String synsetFileName, Set<String> nounSet) {
+    private Map<Integer, Synset> handleSynsets(String synsetFileName, Map<String, Set<Integer>> nounSet) {
 
         In in = new In(synsetFileName);
 
@@ -62,7 +80,15 @@ public class WordNet {
 
             String[] synonyms = synsetInfo[1].split(" ");
             for (String synonym : synonyms) {
-                nounSet.add(synonym);
+                Set<Integer> ids = nounSet.get(synonym);
+
+                if (ids == null) {
+                    ids = new HashSet<Integer>();
+                }
+
+                ids.add(synsetId);
+
+                nounSet.put(synonym, ids);
             }
         }
 
