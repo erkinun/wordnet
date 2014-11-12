@@ -46,17 +46,28 @@ public class WordNet {
             throw new IllegalArgumentException("not existing noun: " + nounB);
         }
 
-        //SAP sap = new SAP(hypernyms);
+        SAP sap = new SAP(hypernyms);
 
-        //return sap.length()
-
-        throw new IllegalStateException("Not Implemented");
+        return sap.length(nouns.get(nounA), nouns.get(nounB));
     }
 
     // a synset (second field of synsets.txt) that is the common ancestor of nounA and nounB
     // in a shortest ancestral path (defined below)
     public String sap(String nounA, String nounB) {
-        throw new IllegalStateException("Not Implemented");
+
+        if (!isNoun(nounA)) {
+            throw new IllegalArgumentException("not existing noun: " + nounA);
+        }
+
+        if (!isNoun(nounB)) {
+            throw new IllegalArgumentException("not existing noun: " + nounB);
+        }
+
+        SAP sap = new SAP(hypernyms);
+
+        int index = sap.ancestor(nouns.get(nounA), nouns.get(nounB));
+
+        return synsetMap.get(index).getSet();
     }
 
     // do unit testing of this class
@@ -76,7 +87,7 @@ public class WordNet {
             String[] synsetInfo = line.split(",");
 
             int synsetId = Integer.parseInt(synsetInfo[0]);
-            synsets.put(synsetId, new Synset(synsetId, synsetInfo[1]));
+            synsets.put(synsetId, new Synset(synsetInfo[1]));
 
             String[] synonyms = synsetInfo[1].split(" ");
             for (String synonym : synonyms) {
@@ -118,12 +129,14 @@ public class WordNet {
     }
 
     private static class Synset {
-        private int id;
         private String set;
 
-        private Synset(int id, String set) {
-            this.id = id;
+        private Synset(String set) {
             this.set = set;
+        }
+
+        public String getSet() {
+            return set;
         }
     }
 }
