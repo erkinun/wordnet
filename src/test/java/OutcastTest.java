@@ -24,4 +24,27 @@ public class OutcastTest {
 
         Assert.assertEquals("table", outcast.outcast(nouns));
     }
+
+    @Test
+    public void testOutcast8() throws Exception {
+
+        Outcast outcast = new Outcast(wordNet);
+
+        In in = new In("files/outcast8.txt");
+        String[] nouns = in.readAllStrings();
+
+        Assert.assertEquals("bed", outcast.outcast(nouns));
+    }
+
+    @Test
+    public void testOutcast11() throws Exception {
+
+        Outcast outcast = new Outcast(wordNet);
+
+        In in = new In("files/outcast11.txt");
+        String[] nouns = in.readAllStrings();
+
+        Assert.assertEquals("potato", outcast.outcast(nouns));
+    }
+
 }
