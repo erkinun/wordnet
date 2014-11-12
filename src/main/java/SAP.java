@@ -6,7 +6,7 @@ import java.util.List;
  */
 public class SAP {
 
-    private Digraph digraph;
+    private final Digraph digraph;
 
     // constructor takes a digraph (not necessarily a DAG)
     public SAP(Digraph G) {
@@ -72,7 +72,12 @@ public class SAP {
             return minIndex;
         }
         else {
-            return min;
+            if (min == Integer.MAX_VALUE) {
+                return -1;
+            }
+            else {
+                return min;
+            }
         }
     }
 

@@ -6,7 +6,7 @@ import java.util.Map;
  */
 public class Outcast {
 
-    private WordNet wordNet;
+    private final WordNet wordNet;
 
     public Outcast(WordNet wordnet) {
         // constructor takes a WordNet object

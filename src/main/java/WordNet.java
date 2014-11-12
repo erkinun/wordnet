@@ -15,9 +15,7 @@ public class WordNet {
     // constructor takes the name of the two input files
     public WordNet(String synsetFileName, String hypernymFile) {
 
-        synsetMap = handleSynsets(synsetFileName
-                ,
-                nouns);
+        synsetMap = handleSynsets(synsetFileName, nouns);
 
         hypernyms = handleHypernyms(hypernymFile, nouns.keySet().size());
     }
@@ -126,6 +124,12 @@ public class WordNet {
                 int hypernymId = Integer.parseInt(info[i]);
                 localDigraph.addEdge(synsetid, hypernymId);
             }
+        }
+
+        DirectedCycle cycle = new DirectedCycle(localDigraph);
+
+        if (cycle.hasCycle()) {
+            throw new IllegalArgumentException("NON Rooted DAG!");
         }
 
         return localDigraph;

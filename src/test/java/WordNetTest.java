@@ -48,4 +48,11 @@ public class WordNetTest {
     public void distanceToSame() {
         Assert.assertEquals(0, wordNet.distance("Abkhaz", "Abkhaz"));
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldThrowIllegal() {
+        WordNet wordnet = new WordNet("files/synsets.txt", "files/hypernyms3InvalidCycle.txt");
+
+        Assert.assertNull(wordnet);
+    }
 }
